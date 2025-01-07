@@ -253,6 +253,8 @@ async def streaming_community(imdb,client,SC_FAST_SEARCH):
         imdb_id = general[1]
 
         if ismovie == 0 : 
+            
+            print("MammaMia ismovie = 0")
             season = int(general[2])
             episode = int(general[3])
             #Check if fast search is enabled or disabled
@@ -273,8 +275,10 @@ async def streaming_community(imdb,client,SC_FAST_SEARCH):
                 if "tt" in imdb:
                     tmdba = await get_TMDb_id_from_IMDb_id(imdb_id,client)
                 showname,date = get_info_tmdb(tmdba,ismovie,type) 
+                print("MammaMia found get_info_tmdb")
         #HERE THE CASE IF IT IS A MOVIE
         else:
+            print("MammaMia found ismovie=1")
             if SC_FAST_SEARCH == "1":
                 type = "StreamingCommunityFS"
                 if "tt" in imdb:
@@ -297,7 +301,9 @@ async def streaming_community(imdb,client,SC_FAST_SEARCH):
         showname = showname.replace(" ", "+").replace("–", "+").replace("—","+")
         showname = urllib.parse.quote_plus(showname)
         query = f'https://streamingcommunity.{SC_DOMAIN}/api/search?q={showname}'
+        print("MammaMia searching...")
         tid,slug,version = await search(query,date,ismovie,client,SC_FAST_SEARCH,imdb_id)
+        print("MammaMia searched")
         if ismovie == 1:
             #TID means temporaly ID
             url,url720,quality = await get_film(tid,version,client)
