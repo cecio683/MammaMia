@@ -90,7 +90,7 @@ MANIFEST = {
          {
             "type": "events",
             "id": "tv_events",
-            "name": "MammaMia",
+            "name": "MammaMiaEvents",
             "behaviorHints": {
                 "configurable": True,
                 "configurationRequired": True
