@@ -185,7 +185,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
                 channels = item.get('channels')
                 
                 print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
-                if isonfuture(time_str):
+                if isonfuture(time_str) == 1:
                     catalogs["metas"].append({
                         "id": event,
                         "type": type,
@@ -235,8 +235,12 @@ def isonfuture(utc_time_str):
         event_time_utc = datetime(*(time.strptime(utc_time_str, '%H:%M')[0:6]))
     
     naive_utc_dt = datetime.utcnow()
+    print(f"date {naive_utc_dt} {event_time_utc}")
+    if naive_utc_dt < event_time_utc:
+        return 1
+    print(f"return 0")
     
-    return naive_utc_dt < event_time_utc
+    return 0
     
 def get_local_time(utc_time_str):
     try:
