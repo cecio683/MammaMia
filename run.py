@@ -175,7 +175,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
     for categ_name, events_list_json in categs:
         
         #"Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
-        if categ_name == genre 
+        if categ_name == genre:
             events_list = json.loads(events_list_json)
             for item in events_list:
                 event = item.get('event')
