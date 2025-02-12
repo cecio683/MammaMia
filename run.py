@@ -339,7 +339,7 @@ async def addon_stream(request: Request,config, type, id,):
                                 for channel in channels:
                                     streams.append({
                                         'title': channel.get('channel_name'),
-                                        'url': get_stream_link(channel.get('channel_id'))
+                                        'url': webru(channel.get('channel_id'),"dlhd",client,null)
                                     })
                             else:
                                 print(f"Unexpected data structure in 'channels': {channels}")
