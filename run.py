@@ -11,6 +11,7 @@ from Src.API.guardaserie import guardaserie
 from Src.API.guardahd import guardahd
 import  Src.Utilities.config as config
 import logging
+import requests
 from Src.API.okru import okru_get_url
 from Src.API.animeworld import animeworld
 from Src.Utilities.dictionaries import okru,STREAM,extra_sources,webru_vary,webru_dlhd,provider_map,skystreaming
@@ -148,20 +149,44 @@ async def addon_catalog(type: str, id: str, genre: str = None):
         raise HTTPException(status_code=404)
     
     catalogs = {"metas": []}
+
+    if type == "tv":
+        for channel in STREAM["channels"]:
+            if genre and genre not in channel.get("genres", []):
+                continue  # Skip channels that don't match the selected genre
+            
+            description = f'Watch {channel["title"]}'
+            catalogs["metas"].append({
+                "id": channel["id"],
+                "type": type,
+                "name": channel["title"],
+                "poster": channel["poster"],  # Add poster URL if available
+                "description": description,
+                "genres": channel.get("genres", [])
+            })
+    if type == "events":
+        hea = {'User-Agent': UA}
+        categs = []
     
-    for channel in STREAM["channels"]:
-        if genre and genre not in channel.get("genres", []):
-            continue  # Skip channels that don't match the selected genre
-        
-        description = f'Watch {channel["title"]}'
-        catalogs["metas"].append({
-            "id": channel["id"],
-            "type": type,
-            "name": channel["title"],
-            "poster": channel["poster"],  # Add poster URL if available
-            "description": description,
-            "genres": channel.get("genres", [])
-        })
+        try:
+            schedule = requests.get("https://thedaddy.to/schedule/schedule-generated.json", headers=hea, timeout=10).json()
+            for date_key, events in schedule.items():
+                for categ, events_list in events.items():
+                    categs.append((categ, json.dumps(events_list)))
+        except Exception as e:
+            Print (f"Error fetching category data: {e}")
+            return []
+        Print (categs)    
+        for channel in categs:            
+            description = f'Watch {channel["title"]}'
+            catalogs["metas"].append({
+                "id": channel["id"],
+                "type": type,
+                "name": channel["title"],
+                "poster": channel["poster"],  # Add poster URL if available
+                "description": description,
+                "genres": channel.get("genres", [])
+            })
 
     return catalogs
 @app.get('/{config:path}/catalog/{type}/{id}.json')
