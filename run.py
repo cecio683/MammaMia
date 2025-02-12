@@ -187,7 +187,9 @@ async def addon_catalog(type: str, id: str, genre: str = None):
         except Exception as e:
             print (f"Error fetching category data: {e}")
             return []
+            
         print (f"test {categs}")    
+        
         for categ_name, events_list_json in categs:
             events_list = json.loads(events_list_json)
             for item in events_list:
@@ -199,11 +201,11 @@ async def addon_catalog(type: str, id: str, genre: str = None):
                 
                 print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
                 catalogs["metas"].append({
-                    "id": channel["id"],
+                    "id": title,
                     "type": type,
                     "name": title,
                     "description": title,
-                    "genres": channel.get("genres", [])
+                    "genres": categ_name
                 })
                 if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
                     trns.append({
