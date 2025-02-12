@@ -282,7 +282,7 @@ async def addon_meta(request: Request,id: str):
             # Additional fields can be added here
             # Example of using the same poster as background
             'logo': '',
-            'genres': '',  # Example of using the same poster as logo
+            'genres': ''  # Example of using the same poster as logo
         }
     }
     
