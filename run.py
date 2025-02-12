@@ -155,47 +155,47 @@ def root(request: Request):
     return html_content
 
 async def addon_catalog_events(type: str, id: str, genre: str = None):
-     hea = {'User-Agent': 'UA'}
-        categs = []
-        trns = []
-        try:
-            print (f"call thedaddy") 
-            schedule = requests.get("https://thedaddy.to/schedule/schedule-generated.json", headers=hea, timeout=10).json()
-           
-            for date_key, events in schedule.items():
-                for categ, events_list in events.items():
-                    categs.append((categ, json.dumps(events_list)))
-        except Exception as e:
-            print (f"Error fetching category data: {e}")
-            return []
-            
-        print (f"test {categs}")    
+    hea = {'User-Agent': 'UA'}
+    categs = []
+    trns = []
+    try:
+        print (f"call thedaddy") 
+        schedule = requests.get("https://thedaddy.to/schedule/schedule-generated.json", headers=hea, timeout=10).json()
+       
+        for date_key, events in schedule.items():
+            for categ, events_list in events.items():
+                categs.append((categ, json.dumps(events_list)))
+    except Exception as e:
+        print (f"Error fetching category data: {e}")
+        return []
         
-        for categ_name, events_list_json in categs:
-            if categ_name == "Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
-                events_list = json.loads(events_list_json)
-                for item in events_list:
-                    event = item.get('event')
-                    time_str = item.get('time')
-                    event_time_local = get_local_time(time_str)
-                    title = f'{event_time_local} {event}'
-                    channels = item.get('channels')
-                    
-                    print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
-                    catalogs["metas"].append({
-                        "id": event,
-                        "type": type,
-                        "name": title,
-                        "description": title,
-                        "genres": categ_name
+    print (f"test {categs}")    
+    
+    for categ_name, events_list_json in categs:
+        if categ_name == "Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
+            events_list = json.loads(events_list_json)
+            for item in events_list:
+                event = item.get('event')
+                time_str = item.get('time')
+                event_time_local = get_local_time(time_str)
+                title = f'{event_time_local} {event}'
+                channels = item.get('channels')
+                
+                print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
+                catalogs["metas"].append({
+                    "id": event,
+                    "type": type,
+                    "name": title,
+                    "description": title,
+                    "genres": categ_name
+                })
+                if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
+                    trns.append({
+                        'title': title,
+                        'channels': [{'channel_name': channel.get('channel_name'), 'channel_id': channel.get('channel_id')} for channel in channels]
                     })
-                    if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
-                        trns.append({
-                            'title': title,
-                            'channels': [{'channel_name': channel.get('channel_name'), 'channel_id': channel.get('channel_id')} for channel in channels]
-                        })
-                    else:
-                        print(f"Unexpected data structure in 'channels': {channels}")
+                else:
+                    print(f"Unexpected data structure in 'channels': {channels}")
                         
 async def addon_catalog(type: str, id: str, genre: str = None):
     if type != "tv" and type != "events":
