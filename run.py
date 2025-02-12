@@ -173,7 +173,9 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
     print (f"test {categs}")    
     
     for categ_name, events_list_json in categs:
-        if categ_name == "Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
+        
+        #"Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
+        if categ_name == genre 
             events_list = json.loads(events_list_json)
             for item in events_list:
                 event = item.get('event')
@@ -183,6 +185,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
                 channels = item.get('channels')
                 
                 print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
+                if isonfuture(time_str):
                 catalogs["metas"].append({
                     "id": event,
                     "type": type,
@@ -225,7 +228,16 @@ async def addon_catalog(type: str, id: str, genre: str = None):
 
     return catalogs
 
-
+def isonfuture(utc_time_str):
+    try:
+        event_time_utc = datetime.strptime(utc_time_str, '%H:%M')
+    except TypeError:
+        event_time_utc = datetime(*(time.strptime(utc_time_str, '%H:%M')[0:6]))
+    
+    naive_utc_dt = datetime.utcnow()
+    
+    return naive_utc_dt < event_time_utc
+    
 def get_local_time(utc_time_str):
     try:
         event_time_utc = datetime.strptime(utc_time_str, '%H:%M')
