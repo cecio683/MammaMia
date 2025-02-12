@@ -202,7 +202,7 @@ async def addon_catalog(type: str, id: str, genre: str = None):
                     
                     print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
                     catalogs["metas"].append({
-                        "id": title,
+                        "id": event,
                         "type": type,
                         "name": title,
                         "description": title,
@@ -306,6 +306,43 @@ async def addon_stream(request: Request,config, type, id,):
     else:
         MFP = "0"
     async with AsyncSession(proxies = proxies) as client:
+        if type == "events":
+            hea = {'User-Agent': 'UA'}
+            categs = []
+            trns = []
+            try:
+                print (f"call thedaddy") 
+                schedule = requests.get("https://thedaddy.to/schedule/schedule-generated.json", headers=hea, timeout=10).json()
+               
+                for date_key, events in schedule.items():
+                    for categ, events_list in events.items():
+                        categs.append((categ, json.dumps(events_list)))
+            except Exception as e:
+                print (f"Error fetching category data: {e}")
+                return []
+                
+            print (f"test {categs}")    
+            
+            for categ_name, events_list_json in categs:
+                if categ_name == "Soccer":
+                    events_list = json.loads(events_list_json)
+                    for item in events_list:
+                        event = item.get('event')
+                        time_str = item.get('time')
+                        event_time_local = get_local_time(time_str)
+                        title = f'{event_time_local} {event}'
+                        channels = item.get('channels')
+                        if event == id:
+                            print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
+                        
+                            if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
+                                for channel in channels:
+                                    streams.append({
+                                        'title': channel.get('channel_name'),
+                                        'url': channel.get('channel_id')
+                                    })
+                            else:
+                                print(f"Unexpected data structure in 'channels': {channels}")
         if type == "tv":
             for channel in STREAM["channels"]:
                 if channel["id"] == id:
