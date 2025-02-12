@@ -38,7 +38,7 @@ async def get_stream_link(id,site,MFP_CREDENTIALS,client):
             iframe = soup.find('iframe', id='thatframe')
             real_link = iframe.get('src')
             parent_site_domain = real_link.split('/premiumtv')[0]
-            server_key_link = (f'{parent_site_domain}/server_lookup.php?channel_id={id}')
+            server_key_link = (f'{parent_site_domain}/server_lookup.php?channel_id=premium{id}')
             response = await client.get(server_key_link, allow_redirects = False)
             server_key = response.json()['server_key']
             print("server_key {server_key}")
