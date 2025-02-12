@@ -215,6 +215,18 @@ async def addon_catalog(type: str, id: str, genre: str = None):
             
 
     return catalogs
+
+
+def get_local_time(utc_time_str):
+    try:
+        event_time_utc = datetime.strptime(utc_time_str, '%H:%M')
+    except TypeError:
+        event_time_utc = datetime(*(time.strptime(utc_time_str, '%H:%M')[0:6]))
+    timezone_offset_minutes = -300
+    event_time_local = event_time_utc + timedelta(minutes=timezone_offset_minutes)
+    local_time_str = event_time_local.strftime('%I:%M %p').lstrip('0')
+    return local_time_str
+    
 @app.get('/{config:path}/catalog/{type}/{id}.json')
 @limiter.limit("5/second")
 async def first_catalog(request: Request,type: str, id: str, genre: str = None):
