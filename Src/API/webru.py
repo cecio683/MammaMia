@@ -32,8 +32,8 @@ headers = {
 async def get_stream_link(id,site,MFP_CREDENTIALS,client):
     try:
         if site == "dlhd":
-            dlhd_id = webru_dlhd[id]
-            response = await client.get(f"https://thedaddy.{DLHD_DOMAIN}/embed/stream-853.php", impersonate = "chrome124", headers = headers)
+            
+            response = await client.get(f"https://thedaddy.{DLHD_DOMAIN}/embed/stream-{id}.php", impersonate = "chrome124", headers = headers)
             soup = BeautifulSoup(response.text, 'lxml', parse_only=SoupStrainer('iframe'))
             iframe = soup.find('iframe', id='thatframe')
             real_link = iframe.get('src')
@@ -41,6 +41,7 @@ async def get_stream_link(id,site,MFP_CREDENTIALS,client):
             server_key_link = (f'{parent_site_domain}/server_lookup.php?channel_id={dlhd_id}')
             response = await client.get(server_key_link, allow_redirects = False)
             server_key = response.json()['server_key']
+            print("server_key {server_key}")
             '''
             response = await client.get(real_link, allow_redirects = False) 
             print(response.text)
@@ -54,7 +55,7 @@ async def get_stream_link(id,site,MFP_CREDENTIALS,client):
             else:
                 print("No .m3u8 URL found.")
             '''
-            stream_url = f"https://{server_key}new.iosplayer.ru/{server_key}/{dlhd_id}" + "/mono.m3u8"
+            stream_url = f"https://{server_key}new.iosplayer.ru/{server_key}/{id}" + "/mono.m3u8"
         elif site == "vary":
             response = await client.get(f"https://www.tanti.{TF_DOMAIN}/tv-channel/sky-cinema-action-2", impersonate = "chrome124", headers = headers, timeout = 10)
             soup = BeautifulSoup(response.text, 'lxml', parse_only=SoupStrainer('iframe'))
