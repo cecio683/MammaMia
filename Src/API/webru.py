@@ -59,7 +59,7 @@ async def get_stream_link(id,site,MFP_CREDENTIALS,client):
                 print("No .m3u8 URL found.")
             '''
             stream_url = f"https://{server_key}new.iosplayer.ru/{server_key}/{dlhd_id}" + "/mono.m3u8"
-            
+            return stream_url
         elif site == "vary":
             response = await client.get(f"https://www.tanti.{TF_DOMAIN}/tv-channel/sky-cinema-action-2", impersonate = "chrome124", headers = headers, timeout = 10)
             soup = BeautifulSoup(response.text, 'lxml', parse_only=SoupStrainer('iframe'))
