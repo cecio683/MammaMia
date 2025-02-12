@@ -186,20 +186,20 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
                 
                 print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
                 if isonfuture(time_str):
-                catalogs["metas"].append({
-                    "id": event,
-                    "type": type,
-                    "name": title,
-                    "description": title,
-                    "genres": categ_name
-                })
-                if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
-                    trns.append({
-                        'title': title,
-                        'channels': [{'channel_name': channel.get('channel_name'), 'channel_id': channel.get('channel_id')} for channel in channels]
+                    catalogs["metas"].append({
+                        "id": event,
+                        "type": type,
+                        "name": title,
+                        "description": title,
+                        "genres": categ_name
                     })
-                else:
-                    print(f"Unexpected data structure in 'channels': {channels}")
+                    if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
+                        trns.append({
+                            'title': title,
+                            'channels': [{'channel_name': channel.get('channel_name'), 'channel_id': channel.get('channel_id')} for channel in channels]
+                        })
+                    else:
+                        print(f"Unexpected data structure in 'channels': {channels}")
     return catalogs
                         
 async def addon_catalog(type: str, id: str, genre: str = None):
