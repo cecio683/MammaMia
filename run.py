@@ -270,34 +270,22 @@ async def addon_meta(request: Request,id: str):
     # Find the channel by ID
     channel = next((ch for ch in STREAM['channels'] if ch['id'] == id), None)
     
-    if not channel:
-        return id
-    async with AsyncSession(proxies = proxies) as client:
-        if channel["id"] in convert_bho_1 or channel["id"] in convert_bho_2 or channel["id"] in convert_bho_3:
-            description,title =  await epg_guide(channel["id"],client)
-        elif channel["id"] in tivu:
-            description = await tivu_get(channel["id"],client)
-            print(description)
-            title = ""
-        else:
-            description = f'Watch {channel["title"]}'
-            title = ""
+
     meta = {
         'meta': {
-            'id': channel['id'],
+            'id': id,
             'type': 'tv',
-            'name': channel['name'],
-            'poster': channel['poster'],
+            'name': id,
+            'poster': '',
             'posterShape': 'landscape',
-            'description': title + "\n" + description,
+            'description': id,
             # Additional fields can be added here
-            'background': channel['poster'],  # Example of using the same poster as background
-            'logo': channel['poster'],
-            'genres': channel.get('genres', []),  # Example of using the same poster as logo
+            # Example of using the same poster as background
+            'logo': '',
+            'genres': '',  # Example of using the same poster as logo
         }
     }
-    if 'url' in channel:
-        meta['meta']['url'] = channel['url']  # Using the stream URL as a website link
+    
     return respond_with(meta)
 
 
