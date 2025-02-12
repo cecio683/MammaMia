@@ -271,7 +271,7 @@ async def addon_meta(request: Request,id: str):
     channel = next((ch for ch in STREAM['channels'] if ch['id'] == id), None)
     
     if not channel:
-        raise HTTPException(status_code=404, detail="Channel not found")
+        return id
     async with AsyncSession(proxies = proxies) as client:
         if channel["id"] in convert_bho_1 or channel["id"] in convert_bho_2 or channel["id"] in convert_bho_3:
             description,title =  await epg_guide(channel["id"],client)
