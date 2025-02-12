@@ -169,14 +169,16 @@ async def addon_catalog(type: str, id: str, genre: str = None):
         categs = []
     
         try:
+            print (f"call thedaddy") 
             schedule = requests.get("https://thedaddy.to/schedule/schedule-generated.json", headers=hea, timeout=10).json()
+            print (f"call thedaddy result {schedule}") 
             for date_key, events in schedule.items():
                 for categ, events_list in events.items():
                     categs.append((categ, json.dumps(events_list)))
         except Exception as e:
-            Print (f"Error fetching category data: {e}")
+            print (f"Error fetching category data: {e}")
             return []
-        Print (categs)    
+        print (f"test {categs}")    
         for channel in categs:            
             description = f'Watch {channel["title"]}'
             catalogs["metas"].append({
