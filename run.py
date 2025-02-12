@@ -109,7 +109,7 @@ MANIFEST = {
                 {
                     "name": "genre",
                     "isRequired": False,
-                    "options": ["Rai", "Mediaset", "Sky", "Euronews", "La7", "Warner Bros", "FIT", "Sportitalia","RSI","DAZN", "Rakuten", "Pluto", "A+E", "Paramount", "Chill"]
+                    "options": ["Soccer", "Tennis", "Motorsport", "Basketball"]
                 }
             ]
         }
@@ -153,28 +153,9 @@ def root(request: Request):
     instance_url = f"{scheme}://{request.url.netloc}"
     html_content = HTML.replace("{instance_url}", instance_url)
     return html_content
-async def addon_catalog(type: str, id: str, genre: str = None):
-    if type != "tv" and type != "events":
-        raise HTTPException(status_code=404)
-    
-    catalogs = {"metas": []}
 
-    if type == "tv":
-        for channel in STREAM["channels"]:
-            if genre and genre not in channel.get("genres", []):
-                continue  # Skip channels that don't match the selected genre
-            
-            description = f'Watch {channel["title"]}'
-            catalogs["metas"].append({
-                "id": channel["id"],
-                "type": type,
-                "name": channel["title"],
-                "poster": channel["poster"],  # Add poster URL if available
-                "description": description,
-                "genres": channel.get("genres", [])
-            })
-    if type == "events":
-        hea = {'User-Agent': 'UA'}
+async def addon_catalog_events(type: str, id: str, genre: str = None)
+     hea = {'User-Agent': 'UA'}
         categs = []
         trns = []
         try:
@@ -191,7 +172,7 @@ async def addon_catalog(type: str, id: str, genre: str = None):
         print (f"test {categs}")    
         
         for categ_name, events_list_json in categs:
-            if categ_name == "Soccer":
+            if categ_name == "Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
                 events_list = json.loads(events_list_json)
                 for item in events_list:
                     event = item.get('event')
@@ -215,6 +196,29 @@ async def addon_catalog(type: str, id: str, genre: str = None):
                         })
                     else:
                         print(f"Unexpected data structure in 'channels': {channels}")
+                        
+async def addon_catalog(type: str, id: str, genre: str = None):
+    if type != "tv" and type != "events":
+        raise HTTPException(status_code=404)
+    
+    catalogs = {"metas": []}
+
+    if type == "tv":
+        for channel in STREAM["channels"]:
+            if genre and genre not in channel.get("genres", []):
+                continue  # Skip channels that don't match the selected genre
+            
+            description = f'Watch {channel["title"]}'
+            catalogs["metas"].append({
+                "id": channel["id"],
+                "type": type,
+                "name": channel["title"],
+                "poster": channel["poster"],  # Add poster URL if available
+                "description": description,
+                "genres": channel.get("genres", [])
+            })
+    if type == "events":
+       catalogs = await addon_catalog_events(type, id,genre)
             
 
     return catalogs
@@ -225,7 +229,7 @@ def get_local_time(utc_time_str):
         event_time_utc = datetime.strptime(utc_time_str, '%H:%M')
     except TypeError:
         event_time_utc = datetime(*(time.strptime(utc_time_str, '%H:%M')[0:6]))
-    timezone_offset_minutes = -300
+    timezone_offset_minutes = 60
     event_time_local = event_time_utc + timedelta(minutes=timezone_offset_minutes)
     local_time_str = event_time_local.strftime('%I:%M %p').lstrip('0')
     return local_time_str
