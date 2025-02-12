@@ -336,7 +336,7 @@ async def addon_stream(request: Request,config, type, id,):
                             if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
                                 for channel in channels:
                                     print (f"test {channel.get('channel_id')} {channel.get('channel_name')} ")  
-                                    url = await webru(channel.get('channel_id'),"dlhd",client,MFP_CREDENTIALS)
+                                    url = await webru(channel.get('channel_id'),"dlhd",client,"")
                                     print(f"url': {url}")
                                     streams['streams'].append({'title': channel.get('channel_name'),'url': url})
                             else:
