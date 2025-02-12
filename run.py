@@ -232,7 +232,7 @@ def isonfuture(utc_time_str):
     try:
         event_time_utc = datetime.strptime(utc_time_str, '%H:%M')
     except TypeError:
-        event_time_utc = datetime(*(time.strptime(utc_time_str, '%H:%M')[0:6]))
+        event_time_utc = datetime(*(datetime.strptime(utc_time_str, '%H:%M')[0:6]))
     
     naive_utc_dt = datetime.utcnow()
     print(f"date {naive_utc_dt} {event_time_utc}")
