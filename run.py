@@ -165,7 +165,7 @@ async def addon_catalog(type: str, id: str, genre: str = None):
                 "genres": channel.get("genres", [])
             })
     if type == "events":
-        hea = {'User-Agent': UA}
+        hea = {'User-Agent': 'UA'}
         categs = []
     
         try:
