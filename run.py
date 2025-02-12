@@ -234,7 +234,7 @@ def isonfuture(utc_time_str):
     except TypeError:
         event_time_utc = datetime(*(datetime.strptime(utc_time_str, '%H:%M')[0:6]))
     naive_utc_dt = datetime.utcnow()
-    event_time_utc.replace(year=naive_utc_dt.year,month=naive_utc_dt.month,day=naive_utc_dt.day)
+    event_time_utc = event_time_utc.replace(year=naive_utc_dt.year,month=naive_utc_dt.month,day=naive_utc_dt.day)
     naive_utc_dt = naive_utc_dt + timedelta(minutes=-120)
     print(f"date {naive_utc_dt} {event_time_utc}")
     if naive_utc_dt < event_time_utc:
