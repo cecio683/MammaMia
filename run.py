@@ -176,7 +176,7 @@ async def addon_catalog(type: str, id: str, genre: str = None):
     if type == "events":
         hea = {'User-Agent': 'UA'}
         categs = []
-    
+        trns = []
         try:
             print (f"call thedaddy") 
             schedule = requests.get("https://thedaddy.to/schedule/schedule-generated.json", headers=hea, timeout=10).json()
@@ -187,17 +187,32 @@ async def addon_catalog(type: str, id: str, genre: str = None):
         except Exception as e:
             print (f"Error fetching category data: {e}")
             return []
-        print (f"test {categs.items()}")    
-        for channel in categs:            
-            description = f'Watch {channel["title"]}'
-            catalogs["metas"].append({
-                "id": channel["id"],
-                "type": type,
-                "name": channel["title"],
-                "poster": channel["poster"],  # Add poster URL if available
-                "description": description,
-                "genres": channel.get("genres", [])
-            })
+        print (f"test {categs}")    
+        for categ_name, events_list_json in categs:
+            events_list = json.loads(events_list_json)
+            for item in events_list:
+                event = item.get('event')
+                time_str = item.get('time')
+                event_time_local = get_local_time(time_str)
+                title = f'{event_time_local} {event}'
+                channels = item.get('channels')
+                
+                print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
+                catalogs["metas"].append({
+                    "id": channel["id"],
+                    "type": type,
+                    "name": title,
+                    "description": title,
+                    "genres": channel.get("genres", [])
+                })
+                if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
+                    trns.append({
+                        'title': title,
+                        'channels': [{'channel_name': channel.get('channel_name'), 'channel_id': channel.get('channel_id')} for channel in channels]
+                    })
+                else:
+                    log(f"Unexpected data structure in 'channels': {channels}")
+            
 
     return catalogs
 @app.get('/{config:path}/catalog/{type}/{id}.json')
