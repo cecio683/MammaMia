@@ -154,7 +154,8 @@ def root(request: Request):
     html_content = HTML.replace("{instance_url}", instance_url)
     return html_content
 
-async def addon_catalog_events(type: str, id: str, genre: str = None):
+async def addon_catalog_events(type: str, id: str, genre: str = None):    
+    catalogs = {"metas": []}
     hea = {'User-Agent': 'UA'}
     categs = []
     trns = []
