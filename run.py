@@ -11,6 +11,7 @@ from Src.API.guardaserie import guardaserie
 from Src.API.guardahd import guardahd
 import  Src.Utilities.config as config
 import logging
+import json
 import requests
 from Src.API.okru import okru_get_url
 from Src.API.animeworld import animeworld
