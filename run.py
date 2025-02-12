@@ -197,7 +197,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
                     })
                 else:
                     print(f"Unexpected data structure in 'channels': {channels}")
-        return catalogs
+    return catalogs
                         
 async def addon_catalog(type: str, id: str, genre: str = None):
     if type != "tv" and type != "events":
