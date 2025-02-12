@@ -321,8 +321,6 @@ async def addon_stream(request: Request,config, type, id,):
                 print (f"Error fetching category data: {e}")
                 return []
                 
-            print (f"test {categs}")    
-            
             for categ_name, events_list_json in categs:
                 if categ_name == "Soccer":
                     events_list = json.loads(events_list_json)
@@ -338,7 +336,7 @@ async def addon_stream(request: Request,config, type, id,):
                             if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
                                 for channel in channels:
                                     print (f"test {channel.get('channel_id')} {channel.get('channel_name')} ")  
-                                    url = await webru(channel.get('channel_id'),"dlhd",client,"")
+                                    url = await webru(channel.get('channel_id'),"dlhd",client,MFP_CREDENTIALS)
                                     print(f"url': {url}")
                                     streams['streams'].append({'title': channel.get('channel_name'),'url': url})
                             else:
