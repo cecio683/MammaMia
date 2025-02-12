@@ -105,7 +105,7 @@ MANIFEST = {
         }
     ],
     "resources": ["stream", "catalog", "meta"],
-    "types": ["movie", "series", "tv"],
+    "types": ["movie", "series", "tv","events"],
     "name": Name,
     "description": "Addon providing HTTPS Streams for Italian Movies, Series, and Live TV! Note that you need to have Kitsu Addon installed in order to watch Anime",
     "logo": "https://creazilla-store.fra1.digitaloceanspaces.com/emojis/49647/pizza-emoji-clipart-md.png"
@@ -144,7 +144,7 @@ def root(request: Request):
     html_content = HTML.replace("{instance_url}", instance_url)
     return html_content
 async def addon_catalog(type: str, id: str, genre: str = None):
-    if type != "tv":
+    if type != "tv" and type != "events":
         raise HTTPException(status_code=404)
     
     catalogs = {"metas": []}
@@ -156,7 +156,7 @@ async def addon_catalog(type: str, id: str, genre: str = None):
         description = f'Watch {channel["title"]}'
         catalogs["metas"].append({
             "id": channel["id"],
-            "type": "tv",
+            "type": type,
             "name": channel["title"],
             "poster": channel["poster"],  # Add poster URL if available
             "description": description,
