@@ -263,8 +263,9 @@ async def first_catalog(request: Request,type: str, id: str, genre: str = None):
     print(f"response {catalogs}")
     return respond_with(catalogs)
 
-@app.get('/{config:path}/catalog/{type}/{id}/genre={genre}.json')
-async def first_catalog(type: str, id: str, genre: str = None):
+@app.get('/{config:path}/catalog/{type}/{id}/genre={genre}.json')')
+@limiter.limit("20/second")
+async def first_catalog(request: Request,type: str, id: str, genre: str = None):
     catalogs = await addon_catalog(type, id,genre)
     print(f"response {catalogs}")
     return respond_with(catalogs)
