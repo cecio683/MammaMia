@@ -260,13 +260,13 @@ def get_local_time(utc_time_str):
 @limiter.limit("20/second")
 async def first_catalog(request: Request,type: str, id: str, genre: str = None):
     catalogs = await addon_catalog(type, id,genre)
-    print(f"response {catalogs}")
+    
     return respond_with(catalogs)
 
 @app.get('/{config:path}/catalog/{type}/{id}/genre={genre}.json')
 async def first_catalog(type: str, id: str, genre: str = None):
     catalogs = await addon_catalog(type, id,genre)
-    print(f"response {catalogs}")
+    
     return respond_with(catalogs)
 
 @app.get('/{config:path}/meta/tv/{id}.json')
@@ -290,7 +290,7 @@ async def addon_meta(request: Request,id: str):
             'genres': ''  # Example of using the same poster as logo
         }
     }
-    
+    print(f"response {meta}")
     return respond_with(meta)
 
 
@@ -313,7 +313,7 @@ async def addon_meta_events(request: Request,id: str):
             'genres': ''  # Example of using the same poster as logo
         }
     }
-    
+    print(f"response {meta}")
     return respond_with(meta)
 
 @app.get('/{config:path}/stream/{type}/{id}.json')
