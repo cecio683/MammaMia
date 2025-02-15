@@ -294,6 +294,28 @@ async def addon_meta(request: Request,id: str):
     return respond_with(meta)
 
 
+@app.get('/{config:path}/meta/events/{id}.json')
+@limiter.limit("20/second")
+async def addon_meta_events(request: Request,id: str):
+    # Find the channel by ID
+
+    meta = {
+        'meta': {
+            'id': id,
+            'type': 'events',
+            'name': id,
+            'poster': '',
+            'posterShape': 'landscape',
+            'description': id,
+            # Additional fields can be added here
+            # Example of using the same poster as background
+            'logo': '',
+            'genres': ''  # Example of using the same poster as logo
+        }
+    }
+    
+    return respond_with(meta)
+
 @app.get('/{config:path}/stream/{type}/{id}.json')
 @limiter.limit("5/second")
 async def addon_stream(request: Request,config, type, id,):
