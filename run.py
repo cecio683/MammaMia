@@ -188,7 +188,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None, search: st
                 channels = item.get('channels')
                 
                 #print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
-                if isonfuture(time_str) == 1 or (search>'' and event.find(search)>-1):
+                if isonfuture(time_str) == 1 or (search>'' and search in event):
                     thislist = []
                     thislist.append(categ_name)
                     catalogs["metas"].append({
