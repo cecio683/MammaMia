@@ -110,7 +110,7 @@ MANIFEST = {
                     "name": "genre",
                     "isRequired": False,
                     "options": ["Soccer", "Tennis", "Motorsport", "Basketball"]
-                }, { "name": "search", "isRequired": false }
+                }, { "name": "search", "isRequired": False }
                
             ],
               
