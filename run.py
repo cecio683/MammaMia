@@ -157,7 +157,7 @@ def root(request: Request):
     html_content = HTML.replace("{instance_url}", instance_url)
     return html_content
 
-async def addon_catalog_events(type: str, id: str, genre: str = None):    
+async def addon_catalog_events(type: str, id: str, genre: str = None, search: str = None):    
     catalogs = {"metas": []}
     hea = {'User-Agent': 'UA'}
     categs = []
@@ -178,7 +178,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
     for categ_name, events_list_json in categs:
         
         #"Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
-        if categ_name == genre:
+        if categ_name == genre or search>'':
             events_list = json.loads(events_list_json)
             for item in events_list:
                 event = item.get('event')
@@ -188,7 +188,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
                 channels = item.get('channels')
                 
                 #print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
-                if isonfuture(time_str) == 1:
+                if isonfuture(time_str) == 1 or (search>'' and event.find(search)>-1):
                     thislist = []
                     thislist.append(categ_name)
                     catalogs["metas"].append({
@@ -229,11 +229,38 @@ async def addon_catalog(type: str, id: str, genre: str = None):
                 "genres": channel.get("genres", [])
             })
     if type == "events":
-       catalogs = await addon_catalog_events(type, id,genre)
+       catalogs = await addon_catalog_events(type, id, genre, "")
             
 
     return catalogs
 
+     
+async def addon_catalog_search(type: str, id: str, genre: str = None):
+    if type != "tv" and type != "events":
+        raise HTTPException(status_code=404)
+    
+    catalogs = {"metas": []}
+
+    if type == "tv":
+        for channel in STREAM["channels"]:
+            if genre and genre not in channel.get("genres", []):
+                continue  # Skip channels that don't match the selected genre
+            
+            description = f'Watch {channel["title"]}'
+            catalogs["metas"].append({
+                "id": channel["id"],
+                "type": type,
+                "name": channel["title"],
+                "poster": channel["poster"],  # Add poster URL if available
+                "description": description,
+                "genres": channel.get("genres", [])
+            })
+    if type == "events":
+       catalogs = await addon_catalog_events(type, id, "", genre)
+            
+
+    return catalogs
+    
 def isonfuture(utc_time_str):
     try:
         event_time_utc = datetime.strptime(utc_time_str, '%H:%M')
@@ -269,6 +296,12 @@ async def first_catalog(request: Request,type: str, id: str, genre: str = None):
 @app.get('/{config:path}/catalog/{type}/{id}/genre={genre}.json')
 async def first_catalog(type: str, id: str, genre: str = None):
     catalogs = await addon_catalog(type, id,genre)
+    
+    return respond_with(catalogs)
+
+@app.get('/{config:path}/catalog/{type}/{id}/search={genre}.json')
+async def first_catalog(type: str, id: str, genre: str = None):
+    catalogs = await addon_catalog_search(type, id,genre)
     
     return respond_with(catalogs)
 
