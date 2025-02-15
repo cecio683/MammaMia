@@ -192,7 +192,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
                         "id": event,
                         "type": type,
                         "name": title,
-                        "poster":"https://www.creditnews.it/wp-content/uploads/2023/02/gettyimages-200199027-001-b5fb3d8d8469ab744d9e97706fa67bc5c0e4fa40.png",
+                        "poster":"",
                         "description": title,
                         "genres": thislist
                     })
