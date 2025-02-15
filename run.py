@@ -184,7 +184,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
                 title = f'{event_time_local} {event}'
                 channels = item.get('channels')
                 
-                print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
+                #print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
                 if isonfuture(time_str) == 1:
                     catalogs["metas"].append({
                         "id": event,
@@ -237,10 +237,10 @@ def isonfuture(utc_time_str):
     naive_utc_dt = datetime.utcnow()
     event_time_utc = event_time_utc.replace(year=naive_utc_dt.year,month=naive_utc_dt.month,day=naive_utc_dt.day)
     naive_utc_dt = naive_utc_dt + timedelta(minutes=-120)
-    print(f"date {naive_utc_dt} {event_time_utc}")
+    #print(f"date {naive_utc_dt} {event_time_utc}")
     if naive_utc_dt < event_time_utc:
         return 1
-    print(f"return 0")
+    #print(f"return 0")
     
     return 0
     
@@ -263,6 +263,7 @@ async def first_catalog(request: Request,type: str, id: str, genre: str = None):
 @app.get('/{config:path}/catalog/{type}/{id}/genre={genre}.json')
 async def first_catalog(type: str, id: str, genre: str = None):
     catalogs = await addon_catalog(type, id,genre)
+    print(f"response {catalogs}")
     return respond_with(catalogs)
 
 @app.get('/{config:path}/meta/tv/{id}.json')
@@ -343,11 +344,11 @@ async def addon_stream(request: Request,config, type, id,):
                         title = f'{event_time_local} {event}'
                         channels = item.get('channels')
                         if event == id:
-                            print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
+                            #print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
                         
                             if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
                                 for channel in channels:
-                                    print (f"test {channel.get('channel_id')} {channel.get('channel_name')} ")  
+                                    #print (f"test {channel.get('channel_id')} {channel.get('channel_name')} ")  
                                     url = await webru(channel.get('channel_id'),"dlhd",client,"")
                                     print(f"url': {url}")
                                     streams['streams'].append({'title': channel.get('channel_name'),'url': url})
