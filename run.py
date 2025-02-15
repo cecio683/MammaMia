@@ -110,9 +110,12 @@ MANIFEST = {
                     "name": "genre",
                     "isRequired": False,
                     "options": ["Soccer", "Tennis", "Motorsport", "Basketball"]
-                }
-            ]
-        }
+                }, { "name": "search", "isRequired": false }
+               
+            ],
+              
+        },
+        {"id": "eventsCatalog", "type": "events", "name": "Hello, TV Events"}
     ],
     "resources": ["stream", "catalog", "meta"],
     "types": ["movie", "series", "tv","events"],
