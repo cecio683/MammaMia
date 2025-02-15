@@ -170,7 +170,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None):
         print (f"Error fetching category data: {e}")
         return []
         
-    print (f"test {categs}")    
+      
     
     for categ_name, events_list_json in categs:
         
