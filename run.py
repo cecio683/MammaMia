@@ -258,6 +258,7 @@ def get_local_time(utc_time_str):
 @limiter.limit("5/second")
 async def first_catalog(request: Request,type: str, id: str, genre: str = None):
     catalogs = await addon_catalog(type, id,genre)
+    print(f"response {catalogs}")
     return respond_with(catalogs)
 
 @app.get('/{config:path}/catalog/{type}/{id}/genre={genre}.json')
