@@ -34,7 +34,7 @@ async def addon_catalog_tv(client,type: str, id: str, genre: str = None, search:
     catalogs = {"metas": []}
     response = await client.get(f"https://thedaddy.to/24-7-channels.php", impersonate = "chrome124", headers = headers)
     soup = BeautifulSoup(response.text, 'lxml', parse_only=SoupStrainer('a'))
-    a = soup.find('a', rel='noopener')
+    a = soup.find_all('a', rel='noopener')
     print(f"test tv {a}")
     '''
     hea = {'User-Agent': 'UA'}
