@@ -36,16 +36,16 @@ async def addon_catalog_tv(client,type: str, id: str, genre: str = None, search:
     soup = BeautifulSoup(response.text, 'lxml', parse_only=SoupStrainer('a'))
     a = soup.find_all('a', rel='noopener')
     for link in a:
-        print(f"test tv {link.span.strong.text}, {link.get('href').replace('/stream/stream-','').replace('.php','')}")
         if ('Italy' in link.span.strong.text):
-             catalogs["metas"].append({
+            print(f"test tv {link.span.strong.text}, {link.get('href').replace('/stream/stream-','').replace('.php','')}")
+            catalogs["metas"].append({
                         "id": link.get('href').replace('/stream/stream-','').replace('.php',''),
                         "type": "tv",
                         "name": link.span.strong.text,
                         "poster":"",
                         "description": link.span.strong.text,
-                        "genres": []
-                    })
+                        "genres": ["Italy"]
+                   })
         
     '''
     hea = {'User-Agent': 'UA'}
