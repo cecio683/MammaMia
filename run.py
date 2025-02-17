@@ -422,7 +422,9 @@ async def addon_stream(request: Request,config, type, id,):
                             else:
                                 print(f"Unexpected data structure in 'channels': {channels}")
         if type == "tv":
+            print (f"call tv {id}") 
             url = await webru(id,"dlhd",client,"")
+            print (f"call tv {url}") 
             streams['streams'].append({
                             'title': id ,
                             'url': url
