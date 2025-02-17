@@ -360,7 +360,7 @@ async def addon_meta_events(request: Request,id: str):
 @limiter.limit("5/second")
 async def addon_stream(request: Request,config, type, id,):
     
-    print(f"addon_stream {type} {id}")
+    print(f"addon_stream {type} {id} {config},{request}")
     if type not in MANIFEST['types']:
         raise HTTPException(status_code=404)
     streams = {'streams': []}
@@ -422,6 +422,12 @@ async def addon_stream(request: Request,config, type, id,):
                             else:
                                 print(f"Unexpected data structure in 'channels': {channels}")
         if type == "tv":
+            url = await webru(id,"dlhd",client,"")
+            streams['streams'].append({
+                            'title': id ,
+                            'url': url
+                            })     
+            '''
             for channel in STREAM["channels"]:
                 if channel["id"] == id:
                     i = 0
@@ -461,6 +467,7 @@ async def addon_stream(request: Request,config, type, id,):
             
             if not streams['streams']:
                 raise HTTPException(status_code=404)
+            '''
             return respond_with(streams)
         elif "tt" in id or "tmdb" in id or "kitsu" in id:
             print(f"Handling movie or series: {id}")
