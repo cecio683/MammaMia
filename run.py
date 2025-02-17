@@ -230,7 +230,7 @@ async def addon_catalog(type: str, id: str, genre: str = None):
                 "genres": channel.get("genres", [])
             })
         '''
-        catalogs = await addon_catalog_tv(type, id, genre, "")
+        catalogs = await addon_catalog_tv(client,type, id, genre, "")
     if type == "events":
        catalogs = await addon_catalog_events(type, id, genre, "")
             
