@@ -29,6 +29,61 @@ headers = {
     "Cache-Control": "no-cache",
 }
 
+async def addon_catalog_events(type: str, id: str, genre: str = None, search: str = None):    
+    
+    catalogs = {"metas": []}
+    response = await client.get(f"https://thedaddy.{DLHD_DOMAIN}/embed/stream-{id}.php", impersonate = "chrome124", headers = headers)
+    '''
+    hea = {'User-Agent': 'UA'}
+    categs = []
+    trns = []
+    try:
+        print (f"call thedaddy") 
+        schedule = requests.get("https://thedaddy.to/schedule/schedule-generated.json", headers=hea, timeout=10).json()
+       
+        for date_key, events in schedule.items():
+            for categ, events_list in events.items():
+                categs.append((categ, json.dumps(events_list)))
+    except Exception as e:
+        print (f"Error fetching category data: {e}")
+        return []
+        
+      
+    
+    for categ_name, events_list_json in categs:
+        
+        #"Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
+        if categ_name == genre or search>'':
+            events_list = json.loads(events_list_json)
+            for item in events_list:
+                event = item.get('event')
+                time_str = item.get('time')
+                event_time_local = get_local_time(time_str)
+                title = f'{event_time_local} {event}'
+                channels = item.get('channels')
+                
+                #print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
+                if (isonfuture(time_str) == 1 and genre>'') or (search>'' and search in event):
+                    thislist = []
+                    thislist.append(categ_name)
+                    catalogs["metas"].append({
+                        "id": event,
+                        "type": type,
+                        "name": title,
+                        "poster":"",
+                        "description": title,
+                        "genres": thislist
+                    })
+                    if isinstance(channels, list) and all(isinstance(channel, dict) for channel in channels):
+                        trns.append({
+                            'title': title,
+                            'channels': [{'channel_name': channel.get('channel_name'), 'channel_id': channel.get('channel_id')} for channel in channels]
+                        })
+                    else:
+                        print(f"Unexpected data structure in 'channels': {channels}")
+    '''
+    return catalogs
+    
 async def get_stream_link(id,site,MFP_CREDENTIALS,client):
     try:
         if site == "dlhd":
