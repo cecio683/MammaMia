@@ -25,7 +25,7 @@ from Src.API.okru import okru_get_url
 from Src.API.animeworld import animeworld
 from Src.Utilities.dictionaries import okru,STREAM,extra_sources,webru_vary,webru_dlhd,provider_map,skystreaming
 from Src.API.epg import tivu, tivu_get,epg_guide,convert_bho_1,convert_bho_2,convert_bho_3
-from Src.API.webru import webru,get_skystreaming
+from Src.API.webru import webru,get_skystreaming,addon_catalog_tv
 from curl_cffi.requests import AsyncSession
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -215,7 +215,8 @@ async def addon_catalog(type: str, id: str, genre: str = None):
     catalogs = {"metas": []}
 
     if type == "tv":
-        for channel in STREAM["channels"]:
+        '''
+            for channel in STREAM["channels"]:
             if genre and genre not in channel.get("genres", []):
                 continue  # Skip channels that don't match the selected genre
             
@@ -228,6 +229,8 @@ async def addon_catalog(type: str, id: str, genre: str = None):
                 "description": description,
                 "genres": channel.get("genres", [])
             })
+        '''
+        catalogs = await addon_catalog_tv(type, id, genre, "")
     if type == "events":
        catalogs = await addon_catalog_events(type, id, genre, "")
             
