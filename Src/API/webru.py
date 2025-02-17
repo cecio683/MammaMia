@@ -39,7 +39,7 @@ async def addon_catalog_tv(client,type: str, id: str, genre: str = None, search:
         print(f"test tv {link.span.strong.text}, {link.get('href')}")
         soupstrong = BeautifulSoup(link.text, 'lxml', parse_only=SoupStrainer('strong'))
         target = soupstrong.find('strong',  {})
-        print(f"test tv {link.get('strong')}, {link.get('href')}")
+        print(f"test tv {link.get('strong')},{target}, {link.get('href')}")
         
     '''
     hea = {'User-Agent': 'UA'}
