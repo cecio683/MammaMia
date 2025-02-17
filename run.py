@@ -319,7 +319,7 @@ async def addon_meta(request: Request,id: str):
     meta = {
         'meta': {
             'id': id,
-            'type': 'events',
+            'type': 'tv',
             'name': id,
             'poster': '',
             'posterShape': 'landscape',
