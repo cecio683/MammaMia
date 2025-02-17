@@ -35,7 +35,7 @@ async def addon_catalog_events(client,type: str, id: str, genre: str = None, sea
     response = await client.get(f"https://thedaddy.to/24-7-channels.php", impersonate = "chrome124", headers = headers)
     soup = BeautifulSoup(response.text, 'lxml', parse_only=SoupStrainer('a'))
     a = soup.find('a', rel='noopener')
-    print(f"test tv {a}}
+    print(f"test tv {a}")
     '''
     hea = {'User-Agent': 'UA'}
     categs = []
