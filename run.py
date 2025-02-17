@@ -230,7 +230,8 @@ async def addon_catalog(type: str, id: str, genre: str = None):
                 "genres": channel.get("genres", [])
             })
         '''
-        catalogs = await addon_catalog_tv(client,type, id, genre, "")
+        async with AsyncSession(proxies = proxies) as client:
+            catalogs = await addon_catalog_tv(client,type, id, genre, "")
     if type == "events":
        catalogs = await addon_catalog_events(type, id, genre, "")
             
