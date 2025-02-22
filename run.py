@@ -402,7 +402,8 @@ async def addon_stream(request: Request,config, type, id,):
                 return []
                 
             for categ_name, events_list_json in categs:
-                if  1=1:#categ_name == "Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
+                if  1==1:
+                    #categ_name == "Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
                     events_list = json.loads(events_list_json)
                     for item in events_list:
                         event = item.get('event')
