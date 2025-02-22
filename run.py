@@ -188,7 +188,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None, search: st
                 channels = item.get('channels')
                 
                 #print (f"test {event} {time_str} {event_time_local} {title} {channels} ")  
-                if (isonfuture(time_str) == 1 and genre>'') or (search>'' and search in event):
+                if (isonfuture(time_str) == 1 and genre>'') or (search>'' and search.lower in event.lower):
                     thislist = []
                     thislist.append(categ_name)
                     catalogs["metas"].append({
@@ -402,7 +402,7 @@ async def addon_stream(request: Request,config, type, id,):
                 return []
                 
             for categ_name, events_list_json in categs:
-                if categ_name == "Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
+                if  1=1:#categ_name == "Soccer" or categ_name ==  "Tennis" or categ_name ==   "Motorsport" or categ_name ==   "Basketball":
                     events_list = json.loads(events_list_json)
                     for item in events_list:
                         event = item.get('event')
