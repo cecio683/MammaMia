@@ -32,7 +32,7 @@ headers = {
 async def addon_catalog_tv(client,type: str, id: str, genre: str = None, search: str = None):    
     
     catalogs = {"metas": []}
-    response = await client.get(f"https://thedaddy.mp/24-7-channels.php", impersonate = "chrome124", headers = headers)
+    response = await client.get(f"https://daddylive.mp/24-7-channels.php", impersonate = "chrome124", headers = headers)
     soup = BeautifulSoup(response.text, 'lxml', parse_only=SoupStrainer('a'))
     a = soup.find_all('a', rel='noopener')
     for link in a:
@@ -53,7 +53,7 @@ async def addon_catalog_tv(client,type: str, id: str, genre: str = None, search:
     trns = []
     try:
         print (f"call thedaddy") 
-        schedule = requests.get("https://thedaddy.to/schedule/schedule-generated.json", headers=hea, timeout=10).json()
+        schedule = requests.get("https://daddylive.mp/schedule/schedule-generated.json", headers=hea, timeout=10).json()
        
         for date_key, events in schedule.items():
             for categ, events_list in events.items():
