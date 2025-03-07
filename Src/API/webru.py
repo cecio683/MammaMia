@@ -7,6 +7,7 @@ from urllib.parse import urlparse
 import re
 TF_DOMAIN = config.TF_DOMAIN
 DLHD_DOMAIN = config.DLHD_DOMAIN
+DLHD_SITE = config.DLHD_SITE
 env_vars = load_env()
 MEDIAFLOW_PASS = env_vars.get('MEDIAFLOW_PASS')
 Referer = "https://ilovetoplay.xyz/"
