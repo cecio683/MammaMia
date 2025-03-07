@@ -76,7 +76,7 @@
               "enabled":"1"
           },
           "DaddyLiveHD":{
-              "domain":"https://daddylive.mp/",
+              "site":"https://daddylive.mp/",
               "domain":"mp",
               "enabled":"1"
           }
