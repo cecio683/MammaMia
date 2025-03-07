@@ -100,6 +100,7 @@ async def addon_catalog_tv(client,type: str, id: str, genre: str = None, search:
     return catalogs
     
 async def get_stream_link(id,site,MFP_CREDENTIALS,client):
+    print("get_stream_link {DLHD_SITE}.{DLHD_DOMAIN}")
     try:
         if site == "dlhd":
             
