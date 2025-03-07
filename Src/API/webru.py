@@ -129,7 +129,7 @@ async def get_stream_link(id,site,MFP_CREDENTIALS,client):
                 print("No .m3u8 URL found.")
             '''
             if serverKey == "top1/cdn":
-                stream_url=f"https://top1.koskoros.ru/top1/cdn/premium{id}" + "/mono.m3u8" :
+                stream_url=f"https://top1.koskoros.ru/top1/cdn/premium{id}" + "/mono.m3u8" 
             else
                 stream_url = f"https://{server_key}new.koskoros.ru/{server_key}/premium{id}" + "/mono.m3u8"
                 
