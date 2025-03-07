@@ -103,6 +103,7 @@ async def get_stream_link(id,site,MFP_CREDENTIALS,client):
     try:
         if site == "dlhd":
             
+            print("{DLHD_SITE}.{DLHD_DOMAIN}")
             response = await client.get(f"https://{DLHD_SITE}.{DLHD_DOMAIN}/embed/stream-{id}.php", impersonate = "chrome124", headers = headers)
             soup = BeautifulSoup(response.text, 'lxml', parse_only=SoupStrainer('iframe'))
             iframe = soup.find('iframe', id='thatframe')
