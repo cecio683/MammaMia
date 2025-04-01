@@ -134,9 +134,18 @@ async def get_stream_link(id,site,MFP_CREDENTIALS,client):
                 stream_url=f"https://top1.koskoros.ru/top1/cdn/premium{id}" + "/mono.m3u8" 
             else:
                 stream_url = f"https://{server_key}.iosplayer.ru/{server_key}/premium{id}" + "/mono.m3u8"
-                
+
+            mfp_url = MFP_CREDENTIALS[0]
+            mfp_pass = MFP_CREDENTIALS[1]
+            
+            print("response {mfp_url} {mfp_pass}")
+            new_stream_url = f'{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_pass}&d={stream_url}&h_Referer={Referer}&h_Origin={Origin}&h_User-Agent=Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F58.0.3029.110%20Safari%2F537.3'
+            
+            print("response {new_stream_url}")
+            return new_stream_url
+        
             #stream_url = f"https://{server_key}new.iosplayer.ru/{server_key}/premium{id}" + "/mono.m3u8"
-            return stream_url
+            #return stream_url
         elif site == "vary":
             response = await client.get(f"https://www.tanti.{TF_DOMAIN}/tv-channel/sky-cinema-action-2", impersonate = "chrome124", headers = headers, timeout = 10)
             soup = BeautifulSoup(response.text, 'lxml', parse_only=SoupStrainer('iframe'))
