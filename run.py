@@ -164,7 +164,7 @@ async def addon_catalog_events(type: str, id: str, genre: str = None, search: st
     trns = []
     try:
         print (f"call thedaddy") 
-        schedule = requests.get("https://daddylive.mp/schedule/schedule-generated.json", headers=hea, timeout=10).json()
+        schedule = requests.get("https://daddylive.mp/schedule/schedule-generated.php", headers=hea, timeout=10).json()
        
         for date_key, events in schedule.items():
             for categ, events_list in events.items():
@@ -392,7 +392,7 @@ async def addon_stream(request: Request,config, type, id,):
             trns = []
             try:
                 print (f"call thedaddy") 
-                schedule = requests.get("https://daddylive.mp/schedule/schedule-generated.json", headers=hea, timeout=10).json()
+                schedule = requests.get("https://daddylive.mp/schedule/schedule-generated.php", headers=hea, timeout=10).json()
                
                 for date_key, events in schedule.items():
                     for categ, events_list in events.items():
