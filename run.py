@@ -159,7 +159,7 @@ def root(request: Request):
 
 async def addon_catalog_events(type: str, id: str, genre: str = None, search: str = None):    
     catalogs = {"metas": []}
-    hea = {'User-Agent': 'UA'}
+    hea = {'User-Agent': 'UA','Referer':'https://daddylive.mp/'}
     categs = []
     trns = []
     try:
