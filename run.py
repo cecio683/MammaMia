@@ -387,7 +387,7 @@ async def addon_stream(request: Request,config, type, id,):
         MFP = "0"
     async with AsyncSession(proxies = proxies) as client:
         if type == "events":
-            hea = {'User-Agent': 'UA'}
+            hea = {'User-Agent': 'UA','Referer':'https://daddylive.mp/'}
             categs = []
             trns = []
             try:
