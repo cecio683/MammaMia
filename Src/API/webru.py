@@ -100,23 +100,21 @@ async def addon_catalog_tv(client,type: str, id: str, genre: str = None, search:
     return catalogs
     
 async def get_stream_link(id,site,MFP_CREDENTIALS,client):
-    print("get_stream_link {DLHD_SITE}.{DLHD_DOMAIN}")
+    print(f"get_stream_link {DLHD_SITE}.{DLHD_DOMAIN}")
     try:
         if site == "dlhd":
-            
-            print("{DLHD_SITE}.{DLHD_DOMAIN}")
             response = await client.get(f"https://{DLHD_SITE}.{DLHD_DOMAIN}/embed/stream-{id}.php", impersonate = "chrome124", headers = headers)
             soup = BeautifulSoup(response.text, 'lxml', parse_only=SoupStrainer('iframe'))
             iframe = soup.find('iframe', id='thatframe')
             real_link = iframe.get('src')
             parent_site_domain = real_link.split('/premiumtv')[0]
-            print("parent_site_domain {parent_site_domain}")
+            print(f"parent_site_domain {parent_site_domain}")
             server_key_link = (f'{parent_site_domain}/server_lookup.php?channel_id=premium{id}')
-            print("server_key_link {server_key_link}")
+            print(f"server_key_link {server_key_link}")
             response = await client.get(server_key_link, allow_redirects = False)
-            print("response {response}")
+            print(f"response {response}")
             server_key = response.json()['server_key']
-            print("server_key {server_key}")
+            print(f"server_key {server_key}")
             '''
             response = await client.get(real_link, allow_redirects = False) 
             print(response.text)
@@ -135,13 +133,18 @@ async def get_stream_link(id,site,MFP_CREDENTIALS,client):
             else:
                 stream_url = f"https://{server_key}.iosplayer.ru/{server_key}/premium{id}" + "/mono.m3u8"
 
-            mfp_url = MFP_CREDENTIALS[0]
-            mfp_pass = MFP_CREDENTIALS[1]
+            print(f"stream_url {stream_url}")
+            try:
+                mfp_url = MFP_CREDENTIALS[0]
+                mfp_pass = MFP_CREDENTIALS[1]
+                
+                print(f"response {mfp_url} {mfp_pass}")
+                new_stream_url = f'{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_pass}&d={stream_url}&h_Referer={Referer}&h_Origin={Origin}&h_User-Agent=Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F58.0.3029.110%20Safari%2F537.3'
             
-            print(f"response {mfp_url} {mfp_pass}")
-            new_stream_url = f'{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_pass}&d={stream_url}&h_Referer={Referer}&h_Origin={Origin}&h_User-Agent=Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F58.0.3029.110%20Safari%2F537.3'
-            
-            print(f"response {new_stream_url}")
+                print(f"response {new_stream_url}")
+            except Exception as e:
+                print(f"MFP not found ",e)
+                
             return stream_url
         
             #stream_url = f"https://{server_key}new.iosplayer.ru/{server_key}/premium{id}" + "/mono.m3u8"
